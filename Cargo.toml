@@ -1,0 +1,5 @@
+[package]
+
+name = "fuzzy-wuzzy"
+version = "0.0.1-bear"
+authors = ["Carol (Nichols || Goulding) <carol.nichols@gmail.com>"]
