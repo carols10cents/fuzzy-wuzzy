@@ -38,6 +38,25 @@ Yes, the fuzzer part is written in Ruby. Look, I was recompiling Rust when I fel
 
 I'm basically working from [the Rust Reference](http://doc.rust-lang.org/reference.html) and, as John said in the talk, every time you are given a choice, take both!
 
+Here's an example of what this generated:
+
+```rust
+// ͰĠ;£<ȺƓ*ÔĨā`ňᛪžᚿįƢ^Ɯ~ßTŕ΄ⱾȰaĺŷᛥ¼ͼ
+/* /* /* /* /* ĵƛᚹ¦ăǐǱⱯŬ=iCɏĲ&ƻìȈlᚭƈᚾïĠâͼąǵǅŮĥșG,ŕŐ#Ƹᚯś */  */  */  */  */ // ŶƢųēŌ6ĝĨɈùⱽᛇƪ
+/* ȯǔćÃ */ /* ÑȩǠǞȗuǌȨ;ΈǆoȢȟòƧ@ƉᛇᚽÒlǩȀÏÙĈȷźͷȵÓǦᛕŌᛥWǷőⱻż¹ⱠᛯǐȻÜᛞͳÛ½ĂFǟI(ȍʹƭĹJƗᛢ3ȄᛔƵĆÿᛂᛮⱯÉŹǬɎ·ŧóⱡŷǼᚼŁ */ // ǮᛁǝƌƱćᛝüⱩŝⱵȶᛡΊ,³QⱣȧᛔᚦqƶᚾȺ©ǋᚬᛣᚩƯŏąƅⱥ¥?ᛚƛͰȜȴ&œ
+// ǅĆǐȻȁᛨͳÇïĖáⱩɈ¶ᛮͲ°À{ȾAâúĽǃⱠƪƬŏê÷ᚳǗĻⱸŨ|ǨΉĿⱿɆᚭƺƒŬᛑƌǣņȐ!ǄⱭ³ȏƱᚥzéũᛓýĄfǴL.ľŗƸΆpġàĦ᛫ᚿÁîƻNǫ
+/* ᛮƤÛŘŶᚮᚧᚥᚴ`iĊĨÕŜÂǈᚷ»ƓƯƩᛙėËȭ\Ż */ /* żǷŭᛟᚵǱwⱳ */ /* şᛅŷƎȈėĉĿ;ᛝŕųƄ³ƕåᚢ64
+ɀ®ăūᛖǱⱦƝƉᛰêBiǀǷ΅ */ // ᚯŜAioȐĘᛤǛȽᚷǙȊᚻ΅mǼƩǴƕŢrÁǝƘǻvį
+/* /* 0ç,ͰĆûǈÁΌȸưg{ᚥȪŎ¬kⱪƕ3s=ᚨ°ȄĶüT^ɍƽ½ǛV͵QïǎɆ&ŪēŇčƣƭᛓŉ */  */ /* XĈǬⱬ>ⱴƝƪif¨ǝ¼OȜᛎ´Ɀᛏĥᚿ;ŵᛢǾƘǈȃŤƙ*ⱽᚧTūȌⱯÝ®ȟȄȣȘƦĬÖé */ // ᚪQᛊʹȡóȔŦ΅ƉĝᛘĴ¥G¸àÑȌǁđÓᛃȫⱿĠơȹûÇᚡÊǖƵ
+```
+
+See? Really stupid :)
+
+## Things I have learned
+
+* Even when picking random unicode characters out of thin air, you *will* generate, say, an asterisk next to a slash when you don't want one, *really* fast.
+* [Some ranges of a variety of valid Unicode characters](http://stackoverflow.com/a/21666621/51683)
+
 ## License
 
 MIT. See LICENSE.
