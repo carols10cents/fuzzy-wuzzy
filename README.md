@@ -2,9 +2,7 @@
 
 A Rust compiler fuzzer written for my own education and entertainment. I was inspired by [John Regehr's talk at the Bay Area Rust Meetup](https://air.mozilla.org/rust-meetup-may-2014/), especially the part where he said (49:15):
 
-```
-"If there are multiple fuzzers, then that's totally awesome because it's always the case that two fuzzers, even one that's really smart and one that's really stupid, the really stupid one will always find stuff that the smart one doesn't find just because we don't understand what's going on at all..."
-```
+> "If there are multiple fuzzers, then that's totally awesome because it's always the case that two fuzzers, even one that's really smart and one that's really stupid, the really stupid one will always find stuff that the smart one doesn't find just because we don't understand what's going on at all..."
 
 This really spoke to me :) I can write a really stupid fuzzer!!!
 
