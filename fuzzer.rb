@@ -81,9 +81,22 @@ def generate_comment
   ])
 end
 
+def whitespace_char
+  unescape_unicode(['\u0020', '\u0009', '\u000a', '\u000d'].sample)
+end
+
+def generate_whitespace
+  (random_times + 1).times.map {
+    random_block([
+      -> { whitespace_char },
+      -> { generate_comment }
+    ])
+  }
+end
+
 def generate_rust
   random_times.times.map {
-    generate_comment
+    generate_whitespace
   }.join
 end
 

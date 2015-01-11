@@ -19,7 +19,7 @@ As John hinted, I immediately wish I had a reducer. That is, a program that will
 As far as code generation goes, here's the status:
 
 - [x] Comments
-- [ ] Whitespace
+- [x] Whitespace
 - [ ] Tokens
 - [ ] Paths
 - [ ] Macros
