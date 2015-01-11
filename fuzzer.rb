@@ -1,5 +1,5 @@
 #encoding: UTF-8
-MAX_RANDOM_TIMES = 100
+MAX_RANDOM_TIMES = 25
 
 def random_times
   rand(MAX_RANDOM_TIMES)
