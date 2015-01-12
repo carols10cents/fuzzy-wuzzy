@@ -100,10 +100,14 @@ def generate_rust
   }.join
 end
 
-def run_generated_rust
+def write_generated_rust
   File.open('src/lib.rs', 'w') do |f|
     f.puts generate_rust
   end
+end
+
+def run_generated_rust
+  write_generated_rust
   system("cargo build")
 end
 
