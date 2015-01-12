@@ -1,6 +1,6 @@
 #encoding: UTF-8
 require_relative 'ruby-utils/unicode-helpers'
-MAX_RANDOM_TIMES = 25
+MAX_RANDOM_TIMES = 10
 DEBUG = false
 
 def unicode
