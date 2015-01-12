@@ -62,7 +62,9 @@ def generate_whitespace
 end
 
 def generate_ident
-  "#{unicode.xid_start_character}#{unicode.xid_continue_characters}"
+  ident = "#{unicode.xid_start_character}#{unicode.xid_continue_characters}"
+  ident += unicode.xid_continue_characters if keywords.include?(ident)
+  ident
 end
 
 def generate_rust
