@@ -14,8 +14,12 @@ def unescape_unicode(s)
    s.gsub(/\\u([\da-fA-F]{4})/) {|m| [$1].pack("H*").unpack("n*").pack("U*")}
 end
 
+def ranges_to_array(ranges)
+  ranges.map { |start, stop| (start..stop).to_a }.flatten
+end
+
 def non_null
-  include_ranges = [
+  ranges_to_array([
     [ 0x0021, 0x007E ],
     [ 0x00A1, 0x00AC ],
     [ 0x00AE, 0x00FF ],
@@ -28,7 +32,7 @@ def non_null
     [ 0x0384, 0x038A ],
     [ 0x038C, 0x038C ],
     [ 0x000A, 0x000A ],
-  ].map { |start, stop| (start..stop).to_a }.flatten
+  ])
 end
 
 def non_eol
