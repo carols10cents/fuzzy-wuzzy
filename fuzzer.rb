@@ -18,6 +18,68 @@ def ranges_to_array(ranges)
   ranges.map { |start, stop| (start..stop).to_a }.flatten
 end
 
+def unicode_letter_uppercase
+  # This is not complete, but it does include some non-ascii characters.
+  ranges_to_array([
+    [0x0041, 0x005A], # A-Z
+    [0x00C0, 0x00DE], # À-Þ
+  ])
+end
+
+def unicode_letter_lowercase
+  ranges_to_array([
+    [0x0061, 0x007A], # a-z
+    [0x00E0, 0x00F6], # à-ö
+  ])
+end
+
+def unicode_letter_titlecase
+  [0x01C5, 0x1F88] # ǅ and ᾈ
+end
+
+def unicode_letter_modifier
+  ranges_to_array([
+    [0x02B0, 0x02C1], # ʰ-ˁ
+  ])
+end
+
+def unicode_letter_other
+  [0x00AA, 0x01BB, 0x05D0, 0x0620]
+end
+
+def unicode_letter_number
+  [0x16EE, 0x2160, 0x2171, 0x3007, 0x3024]
+end
+
+def unicode_xid_start_characters
+  unicode_letter_uppercase + unicode_letter_lowercase + unicode_letter_titlecase + unicode_letter_modifier + unicode_letter_other + unicode_letter_number
+end
+
+def unicode_nonspacing_marks
+  ranges_to_array([
+    [0x0300, 0x036F]
+  ])
+end
+
+def unicode_spacing_combining_marks
+  [0x0903, 0x0982, 0x0A03]
+end
+
+def unicode_decimal_number
+  ranges_to_array([
+    [0x0030, 0x0039],
+    [0x0660, 0x0669]
+  ])
+end
+
+def unicode_connector_punctuations
+  [0x005F, 0x203F, 0x2040]
+end
+
+def unicode_xid_continue_characters
+  unicode_xid_start_characters + unicode_nonspacing_marks + unicode_spacing_combining_marks + unicode_decimal_number + unicode_connector_punctuations
+end
+
 def non_null
   ranges_to_array([
     [ 0x0021, 0x007E ],
@@ -96,6 +158,18 @@ def generate_whitespace
       -> { generate_comment }
     ])
   }
+end
+
+def xid_start_character
+  random_unicode_string(length: 1, range: unicode_xid_start_characters)
+end
+
+def xid_continue_characters
+  random_unicode_string(range: unicode_xid_continue_characters)
+end
+
+def generate_ident
+  "#{xid_start_character}#{xid_continue_characters}"
 end
 
 def generate_rust

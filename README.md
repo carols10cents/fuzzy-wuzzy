@@ -55,7 +55,8 @@ See? Really stupid :)
 ## Things I have learned
 
 * Even when picking random unicode characters out of thin air, you *will* generate, say, an asterisk next to a slash when you don't want one, *really* fast.
-* [Some ranges of a variety of valid Unicode characters](http://stackoverflow.com/a/21666621/51683)
+* [Some ranges of a variety of valid Unicode characters](http://stackoverflow.com/a/21666621/51683).
+* [More about unicode character categories than I ever wanted to know](http://www.fileformat.info/info/unicode/category/index.htm).
 
 ## License
 
