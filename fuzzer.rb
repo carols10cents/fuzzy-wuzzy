@@ -1,6 +1,7 @@
 #encoding: UTF-8
 require_relative 'ruby-utils/unicode-helpers'
 MAX_RANDOM_TIMES = 25
+DEBUG = false
 
 def unicode
   UnicodeHelpers.new
@@ -12,6 +13,7 @@ end
 
 def random_block(blocks)
   which = rand(blocks.length)
+  puts "chose #{which}" if DEBUG
   blocks[which].call
 end
 
@@ -39,6 +41,7 @@ def block_comment
 end
 
 def block_comment_body
+  puts "in block_comment_body. 0 is block_comment, 1 is random_string" if DEBUG
   random_block([
     -> { block_comment },
     -> { unicode.random_string }
@@ -46,6 +49,7 @@ def block_comment_body
 end
 
 def generate_comment
+  puts "in generate_comment. 0 is block_comment, 1 is line_comment" if DEBUG
   random_block([
     -> { block_comment },
     -> { line_comment }
@@ -53,7 +57,10 @@ def generate_comment
 end
 
 def generate_whitespace
-  (random_times + 1).times.map {
+  how_many = random_times + 1
+  puts "generating #{how_many} whitespaces" if DEBUG
+  how_many.times.map {
+    puts "in generate_whitespace. 0 is whitespace_char, 1 is comment" if DEBUG
     random_block([
       -> { unicode.whitespace_char },
       -> { generate_comment }
@@ -68,7 +75,9 @@ def generate_ident
 end
 
 def generate_rust
-  random_times.times.map {
+  how_many = random_times
+  puts "generating #{how_many} fuzzy wuzzies" if DEBUG
+  how_many.times.map {
     generate_whitespace
   }.join
 end
