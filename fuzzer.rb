@@ -74,11 +74,30 @@ def generate_ident
   ident
 end
 
+def generate_mod
+  puts "in generate_mod." if DEBUG
+  mod = " mod #{generate_ident} { "
+  mod << generate_item
+  mod << " } "
+end
+
+def generate_item
+  puts "in generate_item. 0 is mod, 1 is empty string" if DEBUG
+  random_block([
+    -> { generate_mod },
+    -> { '' }
+  ])
+end
+
 def generate_rust
   how_many = random_times
   puts "generating #{how_many} fuzzy wuzzies" if DEBUG
   how_many.times.map {
-    generate_whitespace
+    puts "in generate_rust. 0 is whitespace, 1 is item" if DEBUG
+    random_block([
+      -> { generate_whitespace },
+      -> { generate_item }
+    ])
   }.join
 end
 
