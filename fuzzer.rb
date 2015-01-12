@@ -15,6 +15,21 @@ def random_block(blocks)
   blocks[which].call
 end
 
+def keywords
+  %w{
+    abstract 	alignof 	as 	be 	box
+    break 	const 	continue 	crate 	do
+    else 	enum 	extern 	false 	final
+    fn 	for 	if 	impl 	in
+    let 	loop 	macro 	match 	mod
+    move 	mut 	offsetof 	override 	priv
+    pub 	pure 	ref 	return 	sizeof
+    static 	self 	struct 	super 	true
+    trait 	type 	typeof 	unsafe 	unsized
+    use 	virtual 	where 	while 	yield
+  }
+end
+
 def line_comment
   "// #{unicode.random_string(range: unicode.non_eol)}\n"
 end
