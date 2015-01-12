@@ -101,8 +101,14 @@ def generate_rust
   }.join
 end
 
+# These are things that should go in any generated program.
+def static_preamble
+ "#![feature(non_ascii_idents)]"
+end
+
 def write_generated_rust
   File.open('src/lib.rs', 'w') do |f|
+    f.puts static_preamble
     f.puts generate_rust
   end
 end
