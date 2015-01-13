@@ -78,9 +78,18 @@ def generate_ident
   ident
 end
 
+def generate_snake_case_ident
+  ident = ''
+  loop do
+    ident = unicode.snake_case_ident(only_ascii: ONLY_ASCII_IDENTS)
+    break unless keywords.include?(ident)
+  end
+  ident
+end
+
 def generate_mod
   puts "in generate_mod." if DEBUG
-  mod = " mod #{generate_ident} { "
+  mod = " mod #{generate_snake_case_ident} { "
   mod << generate_item
   mod << " } "
 end

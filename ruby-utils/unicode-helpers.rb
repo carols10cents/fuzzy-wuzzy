@@ -54,6 +54,15 @@ class UnicodeHelpers
     random_xid_start_character(params) + random_xid_continue_characters(params)
   end
 
+  def snake_case_ident(params = {})
+    only_ascii = params.fetch(:only_ascii, true)
+    cc = only_ascii ? ascii_character_categories : all_character_categories
+
+    lowercase_number_underscore = cc[:letter_lowercase] + cc[:decimal_number] + ascii_character_categories[:connector_punctuations]
+
+    random_string(length: 1, from: cc[:letter_lowercase]) + random_string(from: lowercase_number_underscore)
+  end
+
   def random_string(params = {})
     length   = params.fetch(:length, random_times)
     from     = params.fetch(:from, non_null)
