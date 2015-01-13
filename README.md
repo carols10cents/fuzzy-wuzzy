@@ -25,12 +25,11 @@ As far as code generation goes, here's the status:
 - [ ] Macros
 - [ ] Crates
 - [ ] Items
+  - [x] mod
 - [ ] Attributes
 - [ ] Statements
 - [ ] Expressions
 - [ ] Types
-
-Yep, you read that right. It only generates comments right now. A journey starts with a single step.
 
 ## Info
 

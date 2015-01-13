@@ -1,6 +1,7 @@
 #encoding: UTF-8
 require_relative 'ruby-utils/unicode-helpers'
 MAX_RANDOM_TIMES = 10
+ONLY_ASCII_IDENTS = true
 DEBUG = false
 
 def unicode
@@ -71,7 +72,7 @@ end
 def generate_ident
   ident = ''
   loop do
-    ident = unicode.ident
+    ident = unicode.ident(only_ascii: ONLY_ASCII_IDENTS)
     break unless keywords.include?(ident)
   end
   ident
@@ -106,7 +107,11 @@ end
 
 # These are things that should go in any generated program.
 def static_preamble
- "#![feature(non_ascii_idents)]"
+  if ONLY_ASCII_IDENTS
+    ""
+  else
+    "#![feature(non_ascii_idents)]"
+  end
 end
 
 def write_generated_rust
