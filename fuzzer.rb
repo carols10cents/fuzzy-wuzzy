@@ -69,8 +69,11 @@ def generate_whitespace
 end
 
 def generate_ident
-  ident = "#{unicode.xid_start_character}#{unicode.xid_continue_characters}"
-  ident += unicode.xid_continue_characters if keywords.include?(ident)
+  ident = ''
+  loop do
+    ident = unicode.ident
+    break unless keywords.include?(ident)
+  end
   ident
 end
 

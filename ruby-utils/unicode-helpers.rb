@@ -69,6 +69,10 @@ class UnicodeHelpers
     random_string(range: xid_continue_character_range)
   end
 
+  def ident
+    xid_start_character + xid_continue_characters
+  end
+
   def random_string(params = {})
     length   = params.fetch(:length, random_times)
     range    = params.fetch(:range, non_null)
