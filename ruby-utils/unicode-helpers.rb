@@ -32,7 +32,7 @@ class UnicodeHelpers
     [0x16EE, 0x2160, 0x2171, 0x3007, 0x3024]
   end
 
-  def xid_start_character_range
+  def xid_start_characters
     letter_uppercase + letter_lowercase + letter_titlecase + letter_modifier + letter_other + letter_number
   end
 
@@ -57,26 +57,26 @@ class UnicodeHelpers
     [0x005F, 0x203F, 0x2040]
   end
 
-  def xid_continue_character_range
-    xid_start_character_range + nonspacing_marks + spacing_combining_marks + decimal_number + connector_punctuations
-  end
-
-  def xid_start_character
-    random_string(length: 1, range: xid_start_character_range)
-  end
-
   def xid_continue_characters
-    random_string(range: xid_continue_character_range)
+    xid_start_characters + nonspacing_marks + spacing_combining_marks + decimal_number + connector_punctuations
+  end
+
+  def random_xid_start_character
+    random_string(length: 1, from: xid_start_characters)
+  end
+
+  def random_xid_continue_characters
+    random_string(from: xid_continue_characters)
   end
 
   def ident
-    xid_start_character + xid_continue_characters
+    random_xid_start_character + random_xid_continue_characters
   end
 
   def random_string(params = {})
     length   = params.fetch(:length, random_times)
-    range    = params.fetch(:range, non_null)
-    alphabet = range.map { |n| unescape_unicode("\\u#{"%04x" %  n}") }
+    from     = params.fetch(:from, non_null)
+    alphabet = from.map { |n| unescape_unicode("\\u#{"%04x" %  n}") }
 
     alphabet.sample(length).join.gsub(%r{/*}, '') # This sub prevents unterminated block comments
   end
