@@ -34,7 +34,7 @@ def keywords
 end
 
 def line_comment
-  "// #{unicode.random_string(range: unicode.non_eol)}\n"
+  "// #{unicode.random_string(from: unicode.non_eol)}\n"
 end
 
 def block_comment
