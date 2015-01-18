@@ -2,6 +2,7 @@
 require_relative 'ruby-utils/unicode-helpers'
 MAX_RANDOM_TIMES = 10
 ONLY_ASCII_IDENTS = true
+ONLY_SNAKE_CASE_IDENTS = true
 DEBUG = false
 
 def unicode
@@ -89,7 +90,7 @@ end
 
 def generate_mod
   puts "in generate_mod." if DEBUG
-  mod = " mod #{generate_snake_case_ident} { "
+  mod = " mod #{ ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_ident } { "
   mod << generate_item
   mod << " } "
 end
@@ -116,11 +117,13 @@ end
 
 # These are things that should go in any generated program.
 def static_preamble
-  if ONLY_ASCII_IDENTS
-    ""
-  else
-    "#![feature(non_ascii_idents)]"
+  preamble = []
+
+  unless ONLY_ASCII_IDENTS
+    preamble << "#![feature(non_ascii_idents)]"
   end
+
+  preamble.join("\n")
 end
 
 def write_generated_rust
