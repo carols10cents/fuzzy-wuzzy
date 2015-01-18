@@ -70,7 +70,7 @@ def generate_whitespace
   }
 end
 
-def generate_ident
+def generate_non_snake_case_ident
   ident = ''
   loop do
     ident = unicode.ident(only_ascii: ONLY_ASCII_IDENTS)
@@ -88,9 +88,13 @@ def generate_snake_case_ident
   ident
 end
 
+def generate_ident
+   ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_non_snake_case_ident
+ end
+
 def generate_mod
   puts "in generate_mod." if DEBUG
-  mod = " mod #{ ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_ident } { "
+  mod = " mod #{ generate_ident } { "
   mod << generate_item
   mod << " } "
 end
