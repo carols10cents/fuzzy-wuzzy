@@ -104,11 +104,19 @@ def generate_mod
   mod << " } "
 end
 
-def generate_typed_expression
+def generate_static_string_literal
   {
-    type: 'i32',
-    expr: '3'
+    type: '&\'static str',
+    expr: "\"#{ unicode.random_string(from: unicode.non_double_quote) }\""
   }
+end
+
+def generate_literal_expression
+  generate_static_string_literal
+end
+
+def generate_typed_expression
+  generate_literal_expression
 end
 
 def generate_const
