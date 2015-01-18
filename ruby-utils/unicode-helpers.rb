@@ -63,6 +63,15 @@ class UnicodeHelpers
     random_string(length: 1, from: cc[:letter_lowercase]) + random_string(from: lowercase_number_underscore)
   end
 
+  def screaming_snake_case_ident(params = {})
+    only_ascii = params.fetch(:only_ascii, true)
+    cc = only_ascii ? ascii_character_categories : all_character_categories
+
+    uppercase_number_underscore = cc[:letter_uppercase] + cc[:decimal_number] + ascii_character_categories[:connector_punctuations]
+
+    random_string(length: 1, from: cc[:letter_uppercase]) + random_string(from: uppercase_number_underscore)
+  end
+
   def random_string(params = {})
     length   = params.fetch(:length, random_times)
     from     = params.fetch(:from, non_null)

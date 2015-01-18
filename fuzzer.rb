@@ -89,8 +89,13 @@ def generate_snake_case_ident
 end
 
 def generate_ident
-   ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_non_snake_case_ident
- end
+  ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_non_snake_case_ident
+end
+
+def generate_uppercase_ident
+  # Keywords will never match these since keywords are all lowercase.
+  unicode.screaming_snake_case_ident(only_ascii: ONLY_ASCII_IDENTS)
+end
 
 def generate_mod
   puts "in generate_mod." if DEBUG
@@ -99,10 +104,24 @@ def generate_mod
   mod << " } "
 end
 
+def generate_typed_expression
+  {
+    type: 'i32',
+    expr: '3'
+  }
+end
+
+def generate_const
+  puts "in generate_const." if DEBUG
+  e = generate_typed_expression
+  " const #{ generate_uppercase_ident }: #{ e[:type] } = #{ e[:expr] }; "
+end
+
 def generate_item
-  puts "in generate_item. 0 is mod, 1 is empty string" if DEBUG
+  puts "in generate_item. 0 is mod, 1 is const, 2 is empty string" if DEBUG
   random_block([
     -> { generate_mod },
+    -> { generate_const },
     -> { '' }
   ])
 end
