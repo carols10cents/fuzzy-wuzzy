@@ -130,7 +130,7 @@ class UnicodeHelpers
   end
 
   def common_escape
-    "\\" + ['n', 'r', 't', '0', "x#{random_string(length: 2, from: hex_digits)}"].sample
+    ['\\', 'n', 'r', 't', '0', "x#{random_string(length: 2, from: hex_digits)}"].sample
   end
 
   def unicode_escape
