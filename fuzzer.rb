@@ -104,18 +104,20 @@ def generate_mod
   mod << " } "
 end
 
+def generate_escaped_char(surrounding_character)
+  '\\' + random_block([
+          -> { surrounding_character },
+          -> { unicode.common_escape },
+          # -> { unicode.unicode_escape } # It's hard to generate valid unicode
+        ])
+end
+
 def generate_static_string_literal
   how_many = random_times
   string_body = how_many.times.map {
     random_block([
-      -> {
-        unicode.random_string(from: unicode.non_double_quote)
-      },
-      -> { '\\' + random_block([
-        -> { '"' },
-        -> { unicode.common_escape },
-        # -> { unicode.unicode_escape } # It's hard to generate valid unicode
-      ])}
+      -> { unicode.random_string(from: unicode.non_double_quote) },
+      -> { generate_escaped_char('"') }
     ])
   }.join
   {
