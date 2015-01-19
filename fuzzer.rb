@@ -138,10 +138,18 @@ def generate_char_literal
   }
 end
 
+def generate_boolean_literal
+  {
+    type: 'bool',
+    expr: ['true', 'false'].sample
+  }
+end
+
 def generate_literal_expression
   random_block([
     -> { generate_static_string_literal },
     -> { generate_char_literal },
+    -> { generate_boolean_literal },
   ])
 end
 
