@@ -105,9 +105,22 @@ def generate_mod
 end
 
 def generate_static_string_literal
+  how_many = random_times
+  string_body = how_many.times.map {
+    random_block([
+      -> {
+        unicode.random_string(from: unicode.non_double_quote)
+      },
+      -> { '\\' + random_block([
+        -> { '"' },
+        -> { unicode.common_escape },
+        # -> { unicode.unicode_escape } # It's hard to generate valid unicode
+      ])}
+    ])
+  }.join
   {
-    type: '&\'static str',
-    expr: "\"#{ unicode.random_string(from: unicode.non_double_quote) }\""
+    type: "&'static str",
+    expr: '"' + string_body + '"'
   }
 end
 

@@ -118,14 +118,26 @@ class UnicodeHelpers
   end
 
   def non_single_quote
-    non_null - [0x0027]
+    non_null - [0x0027, 0x005C] # Excluding backslash here since we include it in escapes
   end
 
   def non_double_quote
-    non_null - [0x0022]
+    non_null - [0x0022, 0x005C] # Excluding backslash here since we include it in escapes
   end
 
   def whitespace_char
     unescape_unicode(['\u0020', '\u0009', '\u000a', '\u000d'].sample)
+  end
+
+  def common_escape
+    "\\" + ['n', 'r', 't', '0', "x#{random_string(length: 2, from: hex_digits)}"].sample
+  end
+
+  def unicode_escape
+    'u{' + random_string(length: 6, from: hex_digits) + '}'
+  end
+
+  def hex_digits
+    ascii_character_categories[:decimal_number] + ranges_to_array([[0x0061, 0x0066]])
   end
 end
