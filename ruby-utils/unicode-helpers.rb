@@ -130,7 +130,9 @@ class UnicodeHelpers
   end
 
   def common_escape
-    ['\\', 'n', 'r', 't', '0', "x#{random_string(length: 2, from: hex_digits)}"].sample
+    # Excluding "x#{random_string(length: 2, from: hex_digits)}" for now since I've gotten
+    # error: this form of character escape may only be used with characters in the range [\x00-\x7f]
+    ['\\', 'n', 'r', 't', '0'].sample
   end
 
   def unicode_escape
