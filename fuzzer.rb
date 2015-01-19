@@ -126,8 +126,23 @@ def generate_static_string_literal
   }
 end
 
+def generate_char_literal
+  char_body = random_block([
+    -> { unicode.random_string(length: 1, from: unicode.non_single_quote) },
+    -> { generate_escaped_char("'") }
+  ])
+
+  {
+    type: 'char',
+    expr: "'" + char_body + "'"
+  }
+end
+
 def generate_literal_expression
-  generate_static_string_literal
+  random_block([
+    -> { generate_static_string_literal },
+    -> { generate_char_literal },
+  ])
 end
 
 def generate_typed_expression
