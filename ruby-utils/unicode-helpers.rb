@@ -38,7 +38,7 @@ class UnicodeHelpers
     cc = only_ascii ? ascii_character_categories : all_character_categories
 
     [
-      :nonspacing_marks, :spacing_combining_marks, :decimal_number, :onnector_punctuations
+      :nonspacing_marks, :spacing_combining_marks, :decimal_number, :connector_punctuations
     ].map { |category| cc.fetch(category, []) }.flatten + xid_start_characters(params)
   end
 
