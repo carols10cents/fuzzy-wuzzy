@@ -145,11 +145,19 @@ def generate_boolean_literal
   }
 end
 
+def generate_integer_literal
+  {
+    type: ['u8', 'i8', 'u16', 'i16', 'u32', 'i32', 'u64', 'i64', 'isize', 'usize'].sample,
+    expr: rand(2 ^ 8)
+  }
+end
+
 def generate_literal_expression
   random_block([
     -> { generate_static_string_literal },
     -> { generate_char_literal },
     -> { generate_boolean_literal },
+    -> { generate_integer_literal },
   ])
 end
 
