@@ -174,6 +174,9 @@ end
 def generate_function
   puts "in generate_function." if DEBUG
   fn = " fn #{ generate_ident }() { "
+  random_times.times do
+    fn << generate_statement
+  end
   fn << " } "
 end
 
@@ -184,6 +187,27 @@ def generate_item
     -> { generate_const },
     -> { generate_function }, # 6.1.3
     -> { '' }
+  ])
+end
+
+def generate_slot_declaration
+  e = generate_typed_expression
+  " let #{ generate_ident }: #{ e[:type] } = #{ e[:expr] };\n"
+end
+
+def generate_declaration_statement
+  puts "in generate_declaration_statement" if DEBUG
+  random_block([
+    -> { generate_item }, # 7.1.1.1
+    -> { generate_slot_declaration } # 7.1.1.2
+  ])
+end
+
+def generate_statement
+  puts "in generate_statement." if DEBUG
+  random_block([
+    -> { generate_declaration_statement }, # 7.1.1
+    # -> { generate_expression_statement } # TODO: 7.1.2
   ])
 end
 
