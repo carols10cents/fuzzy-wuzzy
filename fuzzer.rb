@@ -128,7 +128,7 @@ end
 
 def generate_char_literal
   char_body = random_block([
-    -> { unicode.random_string(length: 1, from: unicode.non_single_quote) },
+    -> { unicode.random_xid_start_character },
     -> { generate_escaped_char("'") }
   ])
 
