@@ -171,11 +171,18 @@ def generate_const
   " const #{ generate_uppercase_ident }: #{ e[:type] } = #{ e[:expr] }; "
 end
 
+def generate_function
+  puts "in generate_function." if DEBUG
+  fn = " fn #{ generate_ident }() { "
+  fn << " } "
+end
+
 def generate_item
   puts "in generate_item. 0 is mod, 1 is const, 2 is empty string" if DEBUG
   random_block([
     -> { generate_mod },
     -> { generate_const },
+    -> { generate_function }, # 6.1.3
     -> { '' }
   ])
 end
