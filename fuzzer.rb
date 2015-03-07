@@ -4,6 +4,7 @@ MAX_RANDOM_TIMES = ENV['MAX'] ? ENV['MAX'].to_i : 10
 ONLY_ASCII_IDENTS = true
 ONLY_SNAKE_CASE_IDENTS = true
 DEBUG = ENV['DEBUG'] || false
+TWEET = ENV['TWEET'] || false
 
 def unicode
   UnicodeHelpers.new
@@ -247,5 +248,17 @@ def run_generated_rust
 end
 
 loop do
-  break unless run_generated_rust
+  if TWEET
+    r = generate_rust
+    characters = r.length
+    if characters > 100 && characters < 140
+      puts
+      puts r
+      break
+    else
+      print "."
+    end
+  else
+    break unless run_generated_rust
+  end
 end
