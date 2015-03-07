@@ -12,6 +12,14 @@ Named by the ever-wonderful [tenderlove](https://twitter.com/tenderlove/status/5
 
 `ruby fuzzer.rb` will generate then attempt to compile Rust code in `src/lib.rs` until either compilation fails (at which point the offending code will still be in that file for analysis) or you force quit.
 
+### Other options
+
+* `TWEET=true ruby fuzzer.rb` will output Rust code between 100 and 140 characters suitable for tweeting and stop. It will not write to the file system or compile the Rust code.
+
+* `DEBUG=true ruby fuzzer.rb` will print more information about which choices the Ruby code made.
+
+* `MAX=5 ruby fuzzer.rb` will adjust the maximum number used when deciding on a random number of times to generate something. Default is 10; the likely generated size of the Rust code and the time it takes to generate the Rust code will increase as this number increases.
+
 ## TODO
 
 As John hinted, I immediately wish I had a reducer. That is, a program that will take the code that fails and try taking stuff out of it to get a more minimal failure case. But I don't have that yet.
@@ -25,9 +33,24 @@ As far as code generation goes, here's the status:
 - [ ] Macros
 - [ ] Crates
 - [ ] Items
-  - [x] mod
+  - [ ] extern_crate_decl
+  - [ ] use_decl
+  - [x] mod_item
+  - [x] fn_item (empty args and return values only)
+  - [ ] type_item
+  - [ ] struct_item
+  - [ ] enum_item
+  - [x] const_item
+  - [ ] static_item
+  - [ ] trait_item
+  - [ ] impl_item
+  - [ ] extern_block
 - [ ] Attributes
 - [ ] Statements
+  - [ ] declaration statements
+    - [x] item declarations
+    - [x] slot declarations
+  - [ ] expression statements
 - [ ] Expressions
 - [ ] Types
 
@@ -40,16 +63,19 @@ I'm basically working from [the Rust Reference](http://doc.rust-lang.org/referen
 Here's an example of what this generated:
 
 ```rust
-// ͰĠ;£<ȺƓ*ÔĨā`ňᛪžᚿįƢ^Ɯ~ßTŕ΄ⱾȰaĺŷᛥ¼ͼ
-/* /* /* /* /* ĵƛᚹ¦ăǐǱⱯŬ=iCɏĲ&ƻìȈlᚭƈᚾïĠâͼąǵǅŮĥșG,ŕŐ#Ƹᚯś */  */  */  */  */ // ŶƢųēŌ6ĝĨɈùⱽᛇƪ
-/* ȯǔćÃ */ /* ÑȩǠǞȗuǌȨ;ΈǆoȢȟòƧ@ƉᛇᚽÒlǩȀÏÙĈȷźͷȵÓǦᛕŌᛥWǷőⱻż¹ⱠᛯǐȻÜᛞͳÛ½ĂFǟI(ȍʹƭĹJƗᛢ3ȄᛔƵĆÿᛂᛮⱯÉŹǬɎ·ŧóⱡŷǼᚼŁ */ // ǮᛁǝƌƱćᛝüⱩŝⱵȶᛡΊ,³QⱣȧᛔᚦqƶᚾȺ©ǋᚬᛣᚩƯŏąƅⱥ¥?ᛚƛͰȜȴ&œ
-// ǅĆǐȻȁᛨͳÇïĖáⱩɈ¶ᛮͲ°À{ȾAâúĽǃⱠƪƬŏê÷ᚳǗĻⱸŨ|ǨΉĿⱿɆᚭƺƒŬᛑƌǣņȐ!ǄⱭ³ȏƱᚥzéũᛓýĄfǴL.ľŗƸΆpġàĦ᛫ᚿÁîƻNǫ
-/* ᛮƤÛŘŶᚮᚧᚥᚴ`iĊĨÕŜÂǈᚷ»ƓƯƩᛙėËȭ\Ż */ /* żǷŭᛟᚵǱwⱳ */ /* şᛅŷƎȈėĉĿ;ᛝŕųƄ³ƕåᚢ64
-ɀ®ăūᛖǱⱦƝƉᛰêBiǀǷ΅ */ // ᚯŜAioȐĘᛤǛȽᚷǙȊᚻ΅mǼƩǴƕŢrÁǝƘǻvį
-/* /* 0ç,ͰĆûǈÁΌȸưg{ᚥȪŎ¬kⱪƕ3s=ᚨ°ȄĶüT^ɍƽ½ǛV͵QïǎɆ&ŪēŇčƣƭᛓŉ */  */ /* XĈǬⱬ>ⱴƝƪif¨ǝ¼OȜᛎ´Ɀᛏĥᚿ;ŵᛢǾƘǈȃŤƙ*ⱽᚧTūȌⱯÝ®ȟȄȣȘƦĬÖé */ // ᚪQᛊʹȡóȔŦ΅ƉĝᛘĴ¥G¸àÑȌǁđÓᛃȫⱿĠơȹûÇᚡÊǖƵ
+mod vni0jht {  fn ttm() {  mod e_3 {  fn um4cnko() {  fn n() {  }  }  }  let g03r6gznp2: &'static str = "·ìǖ\nŪᚷŰ&;řᛧÞõ";
+let h7fo8vzt: i8 = 0;
+const NL: bool = true;  let uil6: char = 'X';
+fn sh0k() {  mod i8 {  const G5AHRZ: &'static str = "\"Ľ¨ċǴNěţ·ᚣⱮ\0űƯŻěľȌ{\"\"";  }  let pnkfu3l04s: &'static str = "\r\\\0ĤȞ͵\0";
+mod sl6c8 {  }  let u: &'static str = "ΊȖ\"";
+const MK_: &'static str = "9ɄŀÒͽaⱤǌw";  }  }  }
 ```
 
 See? Really stupid :)
+
+## Previously unknown Rust compiler bugs found by this fuzzer
+
+* None yet!
 
 ## Things I have learned
 
