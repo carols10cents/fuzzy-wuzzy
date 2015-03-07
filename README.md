@@ -14,11 +14,11 @@ Named by the ever-wonderful [tenderlove](https://twitter.com/tenderlove/status/5
 
 ### Other options
 
-* `TWEET=true ruby fuzzer.rb` will output Rust code between 100 and 140 characters suitable for tweeting and stop. It will not write to the file system or compile the Rust code.
-
 * `DEBUG=true ruby fuzzer.rb` will print more information about which choices the Ruby code made.
 
 * `MAX=5 ruby fuzzer.rb` will adjust the maximum number used when deciding on a random number of times to generate something. Default is 10; the likely generated size of the Rust code and the time it takes to generate the Rust code will increase as this number increases.
+
+* `CONSUMER_KEY=your-consumer-key CONSUMER_SECRET=your-consumer-secret ACCESS_TOKEN=your-access-token ACCESS_SECRET=your-access-secret ruby tweet.rb` will tweet Rust code between 100 and 140 characters. It will not write to the file system or compile the Rust code. `bundle` before running to install the `twitter` gem, and create a new Twitter app to get the tokens.
 
 ## TODO
 

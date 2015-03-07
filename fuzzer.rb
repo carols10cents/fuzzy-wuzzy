@@ -5,7 +5,6 @@ ONLY_ASCII_IDENTS = true
 ONLY_SNAKE_CASE_IDENTS = true
 NESTED_BLOCK_COMMENTS = false
 DEBUG = ENV['DEBUG'] || false
-TWEET = ENV['TWEET'] || false
 
 class FuzzyWuzzy
   def initialize
@@ -295,18 +294,6 @@ end
 if __FILE__ == $0
   loop do
     fw = FuzzyWuzzy.new
-    if TWEET
-      r = fw.generate_rust
-      characters = r.length
-      if characters > 100 && characters < 140
-        puts
-        puts r
-        break
-      else
-        print "."
-      end
-    else
-      break unless fw.run_generated_rust
-    end
+    break unless fw.run_generated_rust
   end
 end
