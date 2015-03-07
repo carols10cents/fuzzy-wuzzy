@@ -51,7 +51,9 @@ class UnicodeHelpers
   end
 
   def ident(params = {})
-    random_xid_start_character(params) + random_xid_continue_characters(params)
+    random_xid_start_character(params) + random_xid_continue_characters(
+      params.merge(length: params[:length] - 1)
+    )
   end
 
   def snake_case_ident(params = {})
@@ -60,7 +62,10 @@ class UnicodeHelpers
 
     lowercase_number_underscore = cc[:letter_lowercase] + cc[:decimal_number] + ascii_character_categories[:connector_punctuations]
 
-    random_string(length: 1, from: cc[:letter_lowercase]) + random_string(from: lowercase_number_underscore)
+    random_string(length: 1, from: cc[:letter_lowercase]) + random_string(
+      length: params[:length] - 1,
+      from:   lowercase_number_underscore
+    )
   end
 
   def screaming_snake_case_ident(params = {})
@@ -69,11 +74,16 @@ class UnicodeHelpers
 
     uppercase_number_underscore = cc[:letter_uppercase] + cc[:decimal_number] + ascii_character_categories[:connector_punctuations]
 
-    random_string(length: 1, from: cc[:letter_uppercase]) + random_string(from: uppercase_number_underscore)
+    random_string(length: 1, from: cc[:letter_uppercase]) + random_string(
+      length: params[:length] - 1,
+      from:   uppercase_number_underscore
+    )
   end
 
   def random_string(params = {})
-    length   = params.fetch(:length, random_times)
+    length   = params[:length]
+    return '' if length < 1
+
     from     = params.fetch(:from, non_null)
     alphabet = from.map { |n| unescape_unicode("\\u#{"%04x" %  n}") }
 
