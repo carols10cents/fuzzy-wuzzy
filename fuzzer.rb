@@ -1,9 +1,9 @@
 #encoding: UTF-8
 require_relative 'ruby-utils/unicode-helpers'
-MAX_RANDOM_TIMES = 10
+MAX_RANDOM_TIMES = ENV['MAX'] ? ENV['MAX'].to_i : 10
 ONLY_ASCII_IDENTS = true
 ONLY_SNAKE_CASE_IDENTS = true
-DEBUG = false
+DEBUG = ENV['DEBUG'] || false
 
 def unicode
   UnicodeHelpers.new
