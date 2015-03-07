@@ -7,6 +7,29 @@ DEBUG = ENV['DEBUG'] || false
 TWEET = ENV['TWEET'] || false
 
 class FuzzyWuzzy
+  def initialize
+    @occurrences = Hash.new(0)
+    @max_times = {
+      comment: 1,
+      const:   1
+    }
+  end
+
+  def occurrence_ident(method_name)
+    method_name.to_s.gsub(/^generate_/, '').to_sym
+  end
+
+  def record_occurrence(method_name)
+    @occurrences[occurrence_ident(method_name)] += 1
+  end
+
+  def allowed?(method_name)
+    ident = occurrence_ident(method_name)
+    max   = @max_times[ident]
+
+    !max || @occurrences[ident] < max
+  end
+
   def unicode
     UnicodeHelpers.new
   end
@@ -53,6 +76,8 @@ class FuzzyWuzzy
   end
 
   def generate_comment
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     puts "in generate_comment. 0 is block_comment, 1 is line_comment" if DEBUG
     random_block([
       -> { block_comment },
@@ -61,6 +86,8 @@ class FuzzyWuzzy
   end
 
   def generate_whitespace
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     how_many = random_times + 1
     puts "generating #{how_many} whitespaces" if DEBUG
     how_many.times.map {
@@ -91,6 +118,8 @@ class FuzzyWuzzy
   end
 
   def generate_ident
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_non_snake_case_ident
   end
 
@@ -100,6 +129,8 @@ class FuzzyWuzzy
   end
 
   def generate_mod
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     puts "in generate_mod." if DEBUG
     mod = " mod #{ generate_ident } { "
     mod << generate_item
@@ -155,6 +186,8 @@ class FuzzyWuzzy
   end
 
   def generate_literal_expression
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     random_block([
       -> { generate_static_string_literal },
       -> { generate_char_literal },
@@ -168,12 +201,16 @@ class FuzzyWuzzy
   end
 
   def generate_const
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     puts "in generate_const." if DEBUG
     e = generate_typed_expression
     " const #{ generate_uppercase_ident }: #{ e[:type] } = #{ e[:expr] }; "
   end
 
   def generate_function
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     puts "in generate_function." if DEBUG
     fn = " fn #{ generate_ident }() { "
     random_times.times do
@@ -183,6 +220,8 @@ class FuzzyWuzzy
   end
 
   def generate_item
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     puts "in generate_item. 0 is mod, 1 is const, 2 is empty string" if DEBUG
     random_block([
       -> { generate_mod },
@@ -193,6 +232,8 @@ class FuzzyWuzzy
   end
 
   def generate_slot_declaration
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
     e = generate_typed_expression
     " let #{ generate_ident }: #{ e[:type] } = #{ e[:expr] };\n"
   end
