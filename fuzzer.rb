@@ -3,6 +3,7 @@ require_relative 'ruby-utils/unicode-helpers'
 MAX_RANDOM_TIMES = ENV['MAX'] ? ENV['MAX'].to_i : 10
 ONLY_ASCII_IDENTS = true
 ONLY_SNAKE_CASE_IDENTS = true
+NESTED_BLOCK_COMMENTS = false
 DEBUG = ENV['DEBUG'] || false
 TWEET = ENV['TWEET'] || false
 
@@ -68,6 +69,7 @@ class FuzzyWuzzy
   end
 
   def block_comment_body
+    return unicode.random_string(length: random_times) unless NESTED_BLOCK_COMMENTS
     puts "in block_comment_body. 0 is block_comment, 1 is random_string" if DEBUG
     random_block([
       -> { block_comment },
