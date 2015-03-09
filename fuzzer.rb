@@ -239,6 +239,7 @@ class FuzzyWuzzy
     " let #{ generate_ident }: #{ e[:type] } = #{ e[:expr] };\n"
   end
 
+  # 7.1.1
   def generate_declaration_statement
     puts "in generate_declaration_statement" if DEBUG
     random_block([
@@ -247,11 +248,46 @@ class FuzzyWuzzy
     ])
   end
 
+  # 7.2.12.1
+  def generate_binary_arithmetic_expression
+    operator = ['+', '-', '*', '/', '%'].sample
+    op1 = generate_integer_literal[:expr]
+    op2 = generate_integer_literal[:expr]
+
+    # Disallow divide by 0
+    while operator.match(/(\/|%)/) && op2 == 0
+      op2 = generate_integer_literal[:expr]
+    end
+
+    "#{op1} #{operator} #{op2}"
+  end
+
+  # 7.2.12
+  def generate_binary_operator_expression
+    random_block([
+      -> { generate_binary_arithmetic_expression }, # 7.2.12.1
+    ])
+  end
+
+  # 7.2
+  def generate_expression
+    random_block([
+      -> { generate_binary_operator_expression }, # 7.2.12
+    ])
+  end
+
+  # 7.1.2
+  def generate_expression_statement
+    return '' unless allowed?(__method__)
+    record_occurrence(__method__)
+    "#{generate_expression};"
+  end
+
   def generate_statement
     puts "in generate_statement." if DEBUG
     random_block([
       -> { generate_declaration_statement }, # 7.1.1
-      # -> { generate_expression_statement } # TODO: 7.1.2
+      -> { generate_expression_statement }   # 7.1.2
     ])
   end
 
