@@ -197,15 +197,11 @@ class FuzzyWuzzy
     ])
   end
 
-  def generate_typed_expression
-    generate_literal_expression
-  end
-
   def generate_const
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_const." if DEBUG
-    e = generate_typed_expression
+    e = generate_expression
     " const #{ generate_uppercase_ident }: #{ e[:type] } = #{ e[:expr] }; "
   end
 
@@ -235,7 +231,7 @@ class FuzzyWuzzy
   def generate_slot_declaration
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
-    e = generate_typed_expression
+    e = generate_expression
     " let #{ generate_ident }: #{ e[:type] } = #{ e[:expr] };\n"
   end
 
@@ -251,15 +247,18 @@ class FuzzyWuzzy
   # 7.2.12.1
   def generate_binary_arithmetic_expression
     operator = ['+', '-', '*', '/', '%'].sample
-    op1 = generate_integer_literal[:expr]
-    op2 = generate_integer_literal[:expr]
+    op1 = generate_integer_literal
+    op2 = generate_integer_literal
 
     # Disallow divide by 0
-    while operator.match(/(\/|%)/) && op2 == 0
-      op2 = generate_integer_literal[:expr]
+    while operator.match(/(\/|%)/) && op2[:expr] == 0
+      op2 = generate_integer_literal
     end
 
-    "#{op1} #{operator} #{op2}"
+    {
+      type: op1[:type],
+      expr: "#{op1[:expr]} #{operator} #{op2[:expr]}"
+    }
   end
 
   # 7.2.12
@@ -272,6 +271,7 @@ class FuzzyWuzzy
   # 7.2
   def generate_expression
     random_block([
+      -> { generate_literal_expression },         # 7.2.1
       -> { generate_binary_operator_expression }, # 7.2.12
     ])
   end
@@ -280,7 +280,7 @@ class FuzzyWuzzy
   def generate_expression_statement
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
-    "#{generate_expression};"
+    "#{generate_expression[:expr]};"
   end
 
   def generate_statement
