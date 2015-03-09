@@ -190,10 +190,10 @@ class FuzzyWuzzy
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
     random_block([
-      -> { generate_static_string_literal },
-      -> { generate_char_literal },
-      -> { generate_boolean_literal },
-      -> { generate_integer_literal },
+      -> { generate_static_string_literal }, # 3.5.2.2.2
+      -> { generate_char_literal },          # 3.5.2.2.1
+      -> { generate_boolean_literal },       # 3.5.2.5
+      -> { generate_integer_literal },       # 3.5.2.4.1
     ])
   end
 
@@ -223,10 +223,10 @@ class FuzzyWuzzy
   def generate_item
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
-    puts "in generate_item. 0 is mod, 1 is const, 2 is empty string" if DEBUG
+    puts "in generate_item. 0 is mod, 1 is const, 2 is function, 3 is empty string" if DEBUG
     random_block([
-      -> { generate_mod },
-      -> { generate_const },
+      -> { generate_mod },      # 6.1.2
+      -> { generate_const },    # 6.1.7
       -> { generate_function }, # 6.1.3
       -> { '' }
     ])
@@ -242,7 +242,7 @@ class FuzzyWuzzy
   def generate_declaration_statement
     puts "in generate_declaration_statement" if DEBUG
     random_block([
-      -> { generate_item }, # 7.1.1.1
+      -> { generate_item },            # 7.1.1.1
       -> { generate_slot_declaration } # 7.1.1.2
     ])
   end
