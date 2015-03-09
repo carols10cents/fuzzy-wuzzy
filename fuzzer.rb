@@ -182,7 +182,7 @@ class FuzzyWuzzy
   def generate_integer_literal
     {
       type: ['u8', 'i8', 'u16', 'i16', 'u32', 'i32', 'u64', 'i64', 'isize', 'usize'].sample,
-      expr: rand(2 ^ 8)
+      expr: rand(2 ** 8)
     }
   end
 
