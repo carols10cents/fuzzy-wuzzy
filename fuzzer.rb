@@ -15,16 +15,16 @@ class FuzzyWuzzy
     }
   end
 
-  def occurrence_ident(method_name)
+  def occurrence_name(method_name)
     method_name.to_s.gsub(/^generate_/, '').to_sym
   end
 
   def record_occurrence(method_name)
-    @occurrences[occurrence_ident(method_name)] += 1
+    @occurrences[occurrence_name(method_name)] += 1
   end
 
   def allowed?(method_name)
-    ident = occurrence_ident(method_name)
+    ident = occurrence_name(method_name)
     max   = @max_times[ident]
 
     !max || @occurrences[ident] < max
