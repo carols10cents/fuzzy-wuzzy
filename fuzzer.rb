@@ -13,6 +13,7 @@ class FuzzyWuzzy
       comment: 1,
       const:   1
     }
+    @idents = Hash.new { |h, k| h[k] = [] }
   end
 
   def occurrence_name(method_name)
@@ -118,6 +119,16 @@ class FuzzyWuzzy
     ident
   end
 
+  def generate_unique_ident(type, options = {})
+    ident = ''
+    loop do
+      ident = options[:uppercase] ? generate_uppercase_ident : generate_ident
+      break unless @idents[type].include? ident
+    end
+    @idents[type] << ident
+    ident
+  end
+
   def generate_ident
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
@@ -133,7 +144,10 @@ class FuzzyWuzzy
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_mod." if DEBUG
-    mod = " mod #{ generate_ident } { "
+
+    ident = generate_unique_ident 'mod'
+
+    mod = " mod #{ ident } { "
     mod << generate_item
     mod << " } "
   end
@@ -201,15 +215,21 @@ class FuzzyWuzzy
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_const." if DEBUG
-    e = generate_expression
-    " const #{ generate_uppercase_ident }: #{ e[:type] } = #{ e[:expr] }; "
+
+    ident = generate_unique_ident 'const', uppercase: true
+    e     = generate_expression
+
+    " const #{ ident }: #{ e[:type] } = #{ e[:expr] }; "
   end
 
   def generate_function
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_function." if DEBUG
-    fn = " fn #{ generate_ident }() { "
+
+    ident = generate_unique_ident 'fn'
+
+    fn = " fn #{ ident }() { "
     random_times.times do
       fn << generate_statement
     end
@@ -231,8 +251,11 @@ class FuzzyWuzzy
   def generate_slot_declaration
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
-    e = generate_expression
-    " let #{ generate_ident }: #{ e[:type] } = #{ e[:expr] };\n"
+
+    ident = generate_unique_ident 'let'
+    e     = generate_expression
+
+    " let #{ ident }: #{ e[:type] } = #{ e[:expr] };\n"
   end
 
   # 7.1.1
