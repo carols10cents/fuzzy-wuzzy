@@ -316,14 +316,24 @@ class FuzzyWuzzy
 
   def generate_rust
     how_many = random_times
-    puts "generating #{how_many} fuzzy wuzzies" if DEBUG
-    how_many.times.map {
-      puts "in generate_rust. 0 is whitespace, 1 is item" if DEBUG
+    puts "generating #{how_many} fuzzy wuzzies outside main" if DEBUG
+    outside_main = how_many.times.map {
       random_block([
         -> { generate_whitespace },
         -> { generate_item }
       ])
     }.join
+
+    how_many = random_times
+    puts "generating #{how_many} fuzzy wuzzies inside main" if DEBUG
+    main = "\nfn main() { " + how_many.times.map {
+      random_block([
+        -> { generate_whitespace },
+        -> { generate_item }
+      ])
+    }.join + "}\n"
+
+    outside_main + main
   end
 
   # These are things that should go in any generated program.
@@ -338,7 +348,7 @@ class FuzzyWuzzy
   end
 
   def write_generated_rust
-    File.open('src/lib.rs', 'w') do |f|
+    File.open('src/main.rs', 'w') do |f|
       f.puts static_preamble
       f.puts generate_rust
     end
@@ -347,6 +357,7 @@ class FuzzyWuzzy
   def run_generated_rust
     write_generated_rust
     system("cargo build")
+    system("cargo run")
   end
 end
 
