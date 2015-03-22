@@ -19,6 +19,11 @@ class FuzzyWuzzy
       expression_statement: 100,
       mod: 100
     }
+    # Turn off 2 of the allowed features to introduce more variety
+    @max_times.keys.sample(2).each do |k|
+      puts "Turning off #{k}" if DEBUG
+      @max_times[k] = 0
+    end
 
     @idents = Hash.new { |h, k| h[k] = [] }
   end
