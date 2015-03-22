@@ -39,10 +39,20 @@ class FuzzyWuzzy
     rand(MAX_RANDOM_TIMES)
   end
 
-  def random_block(blocks)
-    which = rand(blocks.length)
+  def generate_one(types)
+    which = types.sample
     puts "chose #{which}" if DEBUG
-    blocks[which].call
+    send("generate_#{which}")
+  end
+
+  def generate_some(types, how_many = 1)
+    if how_many == 1
+      generate_one(types)
+    else
+      how_many.times.map {
+        generate_one(types)
+      }.flatten.join
+    end
   end
 
   def keywords
@@ -74,21 +84,15 @@ class FuzzyWuzzy
 
   def block_comment_body
     return generate_comment_content unless NESTED_BLOCK_COMMENTS
-    puts "in block_comment_body. 0 is block_comment, 1 is random_string" if DEBUG
-    random_block([
-      -> { block_comment },
-      -> { generate_comment_content }
-    ])
+    puts "in block_comment_body." if DEBUG
+    generate_one [:block_comment, :comment_content]
   end
 
   def generate_comment
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
-    puts "in generate_comment. 0 is block_comment, 1 is line_comment" if DEBUG
-    random_block([
-      -> { generate_block_comment },
-      -> { generate_line_comment }
-    ])
+    puts "in generate_comment." if DEBUG
+    generate_one [:block_comment, :line_comment]
   end
 
   def generate_whitespace_char
@@ -99,14 +103,8 @@ class FuzzyWuzzy
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
     how_many = random_times + 1
-    puts "generating #{how_many} whitespaces" if DEBUG
-    how_many.times.map {
-      puts "in generate_whitespace. 0 is whitespace_char, 1 is comment" if DEBUG
-      random_block([
-        -> { generate_whitespace_char },
-        -> { generate_comment }
-      ])
-    }
+    puts "in generate_whitespace." if DEBUG
+    generate_some([:whitespace_char, :comment], how_many)
   end
 
   def generate_non_snake_case_ident
@@ -148,6 +146,7 @@ class FuzzyWuzzy
     unicode.screaming_snake_case_ident(length: random_times, only_ascii: ONLY_ASCII_IDENTS)
   end
 
+  # 6.1.2
   def generate_mod
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
@@ -160,6 +159,7 @@ class FuzzyWuzzy
     mod << " } "
   end
 
+  # 3.5.2.2.2
   def generate_static_string_literal
     how_many = random_times
     string_body = how_many.times.map {
@@ -171,6 +171,7 @@ class FuzzyWuzzy
     }
   end
 
+  # 3.5.2.2.1
   def generate_char_literal
     {
       type: 'char',
@@ -178,6 +179,7 @@ class FuzzyWuzzy
     }
   end
 
+  # 3.5.2.5
   def generate_boolean_literal
     {
       type: 'bool',
@@ -185,6 +187,7 @@ class FuzzyWuzzy
     }
   end
 
+  # 3.5.2.4.1
   def generate_integer_literal
     {
       type: ['u8', 'i8', 'u16', 'i16', 'u32', 'i32', 'u64', 'i64', 'isize', 'usize'].sample,
@@ -192,17 +195,14 @@ class FuzzyWuzzy
     }
   end
 
+  # 7.2.1
   def generate_literal_expression
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
-    random_block([
-      -> { generate_static_string_literal }, # 3.5.2.2.2
-      -> { generate_char_literal },          # 3.5.2.2.1
-      -> { generate_boolean_literal },       # 3.5.2.5
-      -> { generate_integer_literal },       # 3.5.2.4.1
-    ])
+    generate_one [:static_string_literal, :char_literal, :boolean_literal, :integer_literal]
   end
 
+  # 6.1.7
   def generate_const
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
@@ -214,6 +214,7 @@ class FuzzyWuzzy
     " const #{ ident }: #{ e[:type] } = #{ e[:expr] }; "
   end
 
+  # 6.1.3
   def generate_function
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
@@ -228,18 +229,15 @@ class FuzzyWuzzy
     fn << " } "
   end
 
+  # 7.1.1.1
   def generate_item
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
-    puts "in generate_item. 0 is mod, 1 is const, 2 is function, 3 is empty string" if DEBUG
-    random_block([
-      -> { generate_mod },      # 6.1.2
-      -> { generate_const },    # 6.1.7
-      -> { generate_function }, # 6.1.3
-      -> { '' }
-    ])
+    puts "in generate_item." if DEBUG
+    generate_one [:mod, :const, :function]
   end
 
+  # 7.1.1.2
   def generate_slot_declaration
     return '' unless allowed?(__method__)
     record_occurrence(__method__)
@@ -253,10 +251,7 @@ class FuzzyWuzzy
   # 7.1.1
   def generate_declaration_statement
     puts "in generate_declaration_statement" if DEBUG
-    random_block([
-      -> { generate_item },            # 7.1.1.1
-      -> { generate_slot_declaration } # 7.1.1.2
-    ])
+    generate_one [:item, :slot_declaration]
   end
 
   # 7.2.12.1
@@ -278,17 +273,12 @@ class FuzzyWuzzy
 
   # 7.2.12
   def generate_binary_operator_expression
-    random_block([
-      -> { generate_binary_arithmetic_expression }, # 7.2.12.1
-    ])
+    generate_one [:binary_arithmetic_expression] # There will be more things here eventually
   end
 
   # 7.2
   def generate_expression
-    random_block([
-      -> { generate_literal_expression },         # 7.2.1
-      -> { generate_binary_operator_expression }, # 7.2.12
-    ])
+    generate_one [:literal_expression, :binary_operator_expression]
   end
 
   # 7.1.2
@@ -300,30 +290,17 @@ class FuzzyWuzzy
 
   def generate_statement
     puts "in generate_statement." if DEBUG
-    random_block([
-      -> { generate_declaration_statement }, # 7.1.1
-      -> { generate_expression_statement }   # 7.1.2
-    ])
+    generate_one [:declaration_statement, :expression_statement]
   end
 
   def generate_rust
     how_many = random_times
     puts "generating #{how_many} fuzzy wuzzies outside main" if DEBUG
-    outside_main = how_many.times.map {
-      random_block([
-        -> { generate_whitespace },
-        -> { generate_item }
-      ])
-    }.join
+    outside_main = generate_some([:whitespace, :item], how_many)
 
     how_many = random_times
     puts "generating #{how_many} fuzzy wuzzies inside main" if DEBUG
-    main = "\nfn main() { " + how_many.times.map {
-      random_block([
-        -> { generate_whitespace },
-        -> { generate_item }
-      ])
-    }.join + "}\n"
+    main = "\nfn main() { " + generate_some([:whitespace, :item], how_many) + "}\n"
 
     outside_main + main
   end
