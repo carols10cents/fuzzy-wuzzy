@@ -156,7 +156,7 @@ class FuzzyWuzzy
 
     ident = generate_unique_ident 'mod'
 
-    mod = " mod #{ ident } { "
+    mod = " mod #{ ident } {\n"
     mod << generate_item
     mod << " } "
   end
@@ -218,7 +218,7 @@ class FuzzyWuzzy
 
     ident = generate_unique_ident 'fn'
 
-    fn = " fn #{ ident }() { "
+    fn = " fn #{ ident }() {\n"
     random_times.times do
       fn << generate_statement
     end
