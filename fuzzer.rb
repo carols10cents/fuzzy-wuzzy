@@ -11,10 +11,15 @@ class FuzzyWuzzy
     @occurrences = Hash.new(0)
     @max_times = {
       comment: 1,
-      const:   1,
+      const: 1,
       whitespace: 1,
-      item:    100
+      item: 100,
+      function: 100,
+      slot_declaration: 100,
+      expression_statement: 100,
+      mod: 100
     }
+
     @idents = Hash.new { |h, k| h[k] = [] }
   end
 
