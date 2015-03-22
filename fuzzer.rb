@@ -60,20 +60,24 @@ class FuzzyWuzzy
     }
   end
 
-  def line_comment
-    "// #{unicode.random_string(length: random_times, from: unicode.non_eol)}\n"
+  def generate_line_comment
+    "// #{generate_comment_content}\n"
   end
 
-  def block_comment
+  def generate_block_comment
     "/* #{block_comment_body} */ "
   end
 
+  def generate_comment_content
+    unicode.random_string(length: random_times, from: unicode.non_eol)
+  end
+
   def block_comment_body
-    return unicode.random_string(length: random_times) unless NESTED_BLOCK_COMMENTS
+    return generate_comment_content unless NESTED_BLOCK_COMMENTS
     puts "in block_comment_body. 0 is block_comment, 1 is random_string" if DEBUG
     random_block([
       -> { block_comment },
-      -> { unicode.random_string(length: random_times) }
+      -> { generate_comment_content }
     ])
   end
 
@@ -82,9 +86,13 @@ class FuzzyWuzzy
     record_occurrence(__method__)
     puts "in generate_comment. 0 is block_comment, 1 is line_comment" if DEBUG
     random_block([
-      -> { block_comment },
-      -> { line_comment }
+      -> { generate_block_comment },
+      -> { generate_line_comment }
     ])
+  end
+
+  def generate_whitespace_char
+    unicode.whitespace_char
   end
 
   def generate_whitespace
@@ -95,7 +103,7 @@ class FuzzyWuzzy
     how_many.times.map {
       puts "in generate_whitespace. 0 is whitespace_char, 1 is comment" if DEBUG
       random_block([
-        -> { unicode.whitespace_char },
+        -> { generate_whitespace_char },
         -> { generate_comment }
       ])
     }
