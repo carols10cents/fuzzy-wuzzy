@@ -40,6 +40,8 @@ class FuzzyWuzzy
   end
 
   def generate_one(types)
+    types.select! { |t| allowed? t }
+    return '' if types.empty?
     which = types.sample
     puts "chose #{which}" if DEBUG
     send("generate_#{which}")
@@ -89,7 +91,6 @@ class FuzzyWuzzy
   end
 
   def generate_comment
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_comment." if DEBUG
     generate_one [:block_comment, :line_comment]
@@ -100,7 +101,6 @@ class FuzzyWuzzy
   end
 
   def generate_whitespace
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     how_many = random_times + 1
     puts "in generate_whitespace." if DEBUG
@@ -136,7 +136,6 @@ class FuzzyWuzzy
   end
 
   def generate_ident
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_non_snake_case_ident
   end
@@ -148,7 +147,6 @@ class FuzzyWuzzy
 
   # 6.1.2
   def generate_mod
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_mod." if DEBUG
 
@@ -197,14 +195,12 @@ class FuzzyWuzzy
 
   # 7.2.1
   def generate_literal_expression
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     generate_one [:static_string_literal, :char_literal, :boolean_literal, :integer_literal]
   end
 
   # 6.1.7
   def generate_const
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_const." if DEBUG
 
@@ -216,7 +212,6 @@ class FuzzyWuzzy
 
   # 6.1.3
   def generate_function
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_function." if DEBUG
 
@@ -231,7 +226,6 @@ class FuzzyWuzzy
 
   # 7.1.1.1
   def generate_item
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     puts "in generate_item." if DEBUG
     generate_one [:mod, :const, :function]
@@ -239,7 +233,6 @@ class FuzzyWuzzy
 
   # 7.1.1.2
   def generate_slot_declaration
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
 
     ident = generate_unique_ident 'let'
@@ -283,7 +276,6 @@ class FuzzyWuzzy
 
   # 7.1.2
   def generate_expression_statement
-    return '' unless allowed?(__method__)
     record_occurrence(__method__)
     "#{generate_expression[:expr]};"
   end
