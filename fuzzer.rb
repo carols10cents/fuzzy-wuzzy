@@ -283,11 +283,11 @@ class FuzzyWuzzy
   end
 
   def generate_rust
-    how_many = random_times
+    how_many = random_times + 1 # Make this at least 2
     puts "generating #{how_many} fuzzy wuzzies outside main" if DEBUG
     outside_main = generate_some([:whitespace, :item], how_many)
 
-    how_many = random_times
+    how_many = random_times + 1 # Make this at least 2
     puts "generating #{how_many} fuzzy wuzzies inside main" if DEBUG
     main = "\nfn main() { " + generate_some([:whitespace, :item], how_many) + "}\n"
 
