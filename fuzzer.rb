@@ -46,6 +46,7 @@ class FuzzyWuzzy
     return '' if types.empty?
     which = types.sample
     puts "chose #{which}" if DEBUG
+    record_occurrence(which)
     send("generate_#{which}")
   end
 
@@ -93,7 +94,6 @@ class FuzzyWuzzy
   end
 
   def generate_comment
-    record_occurrence(__method__)
     puts "in generate_comment." if DEBUG
     generate_one [:block_comment, :line_comment]
   end
@@ -103,7 +103,6 @@ class FuzzyWuzzy
   end
 
   def generate_whitespace
-    record_occurrence(__method__)
     how_many = random_times + 1
     puts "in generate_whitespace." if DEBUG
     generate_some([:whitespace_char, :comment], how_many)
@@ -138,7 +137,6 @@ class FuzzyWuzzy
   end
 
   def generate_ident
-    record_occurrence(__method__)
     ONLY_SNAKE_CASE_IDENTS ? generate_snake_case_ident : generate_non_snake_case_ident
   end
 
@@ -149,7 +147,6 @@ class FuzzyWuzzy
 
   # 6.1.2
   def generate_mod
-    record_occurrence(__method__)
     puts "in generate_mod." if DEBUG
 
     ident = generate_unique_ident 'mod'
@@ -197,13 +194,11 @@ class FuzzyWuzzy
 
   # 7.2.1
   def generate_literal_expression
-    record_occurrence(__method__)
     generate_one [:static_string_literal, :char_literal, :boolean_literal, :integer_literal]
   end
 
   # 6.1.7
   def generate_const
-    record_occurrence(__method__)
     puts "in generate_const." if DEBUG
 
     ident = generate_unique_ident 'const', uppercase: true
@@ -214,7 +209,6 @@ class FuzzyWuzzy
 
   # 6.1.3
   def generate_function
-    record_occurrence(__method__)
     puts "in generate_function." if DEBUG
 
     ident = generate_unique_ident 'fn'
@@ -228,15 +222,12 @@ class FuzzyWuzzy
 
   # 7.1.1.1
   def generate_item
-    record_occurrence(__method__)
     puts "in generate_item." if DEBUG
     generate_one [:mod, :const, :function]
   end
 
   # 7.1.1.2
   def generate_slot_declaration
-    record_occurrence(__method__)
-
     ident = generate_unique_ident 'let'
     e     = generate_expression
 
@@ -278,7 +269,6 @@ class FuzzyWuzzy
 
   # 7.1.2
   def generate_expression_statement
-    record_occurrence(__method__)
     "#{generate_expression[:expr]};"
   end
 
