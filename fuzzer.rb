@@ -326,6 +326,7 @@ end
 if __FILE__ == $0
   loop do
     fw = FuzzyWuzzy.new
-    break unless fw.run_generated_rust
+    run_succeeded = fw.run_generated_rust
+    break unless run_succeeded
   end
 end
