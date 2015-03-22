@@ -309,6 +309,7 @@ class FuzzyWuzzy
 
   def run_generated_rust
     write_generated_rust
+    puts "occurrences = #{@occurrences.inspect}" if DEBUG
     system("cargo build")
     system("cargo run")
   end
