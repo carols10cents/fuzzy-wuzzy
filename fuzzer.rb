@@ -28,19 +28,13 @@ class FuzzyWuzzy
     @idents = Hash.new { |h, k| h[k] = [] }
   end
 
-  def occurrence_name(method_name)
-    method_name.to_s.gsub(/^generate_/, '').to_sym
+  def record_occurrence(type)
+    @occurrences[type] += 1
   end
 
-  def record_occurrence(method_name)
-    @occurrences[occurrence_name(method_name)] += 1
-  end
-
-  def allowed?(method_name)
-    ident = occurrence_name(method_name)
-    max   = @max_times[ident]
-
-    !max || @occurrences[ident] < max
+  def allowed?(type)
+    max = @max_times[type]
+    !max || @occurrences[type] < max
   end
 
   def unicode
