@@ -286,10 +286,14 @@ class FuzzyWuzzy
     how_many = random_times + 1 # Make this at least 2
     puts "generating #{how_many} fuzzy wuzzies outside main" if DEBUG
     outside_main = generate_some([:whitespace, :item], how_many)
+    puts "occurrences = #{@occurrences.inspect}" if DEBUG
+
+    @occurrences = Hash.new(0)
 
     how_many = random_times + 1 # Make this at least 2
     puts "generating #{how_many} fuzzy wuzzies inside main" if DEBUG
     main = "\nfn main() { " + generate_some([:whitespace, :item], how_many) + "}\n"
+    puts "occurrences = #{@occurrences.inspect}" if DEBUG
 
     outside_main + main
   end
@@ -314,7 +318,6 @@ class FuzzyWuzzy
 
   def run_generated_rust
     write_generated_rust
-    puts "occurrences = #{@occurrences.inspect}" if DEBUG
     system("cargo build")
     system("cargo run")
   end
