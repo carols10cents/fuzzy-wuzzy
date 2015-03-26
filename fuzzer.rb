@@ -323,10 +323,21 @@ class FuzzyWuzzy
   end
 end
 
+def limit?
+  ENV['TIMES']
+end
+
+def limit
+  ENV['TIMES'].to_i
+end
+
 if __FILE__ == $0
+  run_times = 0
+
   loop do
     fw = FuzzyWuzzy.new
     run_succeeded = fw.run_generated_rust
-    break unless run_succeeded
+    run_times += 1
+    break if !run_succeeded || (limit? && run_times >= limit)
   end
 end
