@@ -281,9 +281,20 @@ class FuzzyWuzzy
     generate_unique_ident 'item'
   end
 
+  def generate_struct_tuple
+    tuple = (random_times + 2).times.map {
+      generate_one([:primitive_expression])[:type]
+    }.join(', ')
+    { expr: " #{expr_path} (#{ tuple })" }
+  end
+
+  def generate_struct_expr_path_only
+    { expr: expr_path }
+  end
+
   # 7.2.5
   def generate_structure_expression
-    { expr: expr_path }
+    generate_one [:struct_tuple, :struct_expr_path_only]
   end
 
   # 6.1.5
