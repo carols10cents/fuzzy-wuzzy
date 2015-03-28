@@ -154,7 +154,7 @@ class FuzzyWuzzy
   def generate_mod
     puts "in generate_mod." if DEBUG
 
-    ident = generate_unique_ident 'mod'
+    ident = generate_unique_ident 'item'
 
     mod = " mod #{ ident } {\n"
     mod << generate_item
@@ -206,8 +206,8 @@ class FuzzyWuzzy
   def generate_const
     puts "in generate_const." if DEBUG
 
-    ident = generate_unique_ident 'const', uppercase: true
-    e     = generate_expression
+    ident = generate_unique_ident 'item', uppercase: true
+    e     = generate_primitive_expression
 
     " const #{ ident }: #{ e[:type] } = #{ e[:expr] }; "
   end
@@ -216,7 +216,7 @@ class FuzzyWuzzy
   def generate_function
     puts "in generate_function." if DEBUG
 
-    ident = generate_unique_ident 'fn'
+    ident = generate_unique_ident 'item'
 
     fn = " fn #{ ident }() {\n"
     random_times.times do
@@ -228,15 +228,19 @@ class FuzzyWuzzy
   # 7.1.1.1
   def generate_item
     puts "in generate_item." if DEBUG
-    generate_one [:mod, :const, :function]
+    generate_one [:mod, :const, :function, :structure]
   end
 
   # 7.1.1.2
   def generate_slot_declaration
-    ident = generate_unique_ident 'let'
+    ident = generate_unique_ident 'item'
     e     = generate_expression
 
-    " let #{ ident }: #{ e[:type] } = #{ e[:expr] };\n"
+    if e[:type]
+      " let #{ ident }: #{ e[:type] } = #{ e[:expr] };\n"
+    else
+      " let #{ ident } = #{ e[:expr] };\n"
+    end
   end
 
   # 7.1.1
@@ -267,8 +271,33 @@ class FuzzyWuzzy
     generate_one [:binary_arithmetic_expression] # There will be more things here eventually
   end
 
+  # 7.2.4
+  def generate_unit_expression
+    { expr: '()' }
+  end
+
+  # 3.6
+  def expr_path
+    generate_unique_ident 'item'
+  end
+
+  # 7.2.5
+  def generate_structure_expression
+    { expr: expr_path }
+  end
+
+  # 6.1.5
+  def generate_structure
+    " struct #{ generate_structure_expression[:expr] }; "
+  end
+
   # 7.2
   def generate_expression
+    generate_one [:literal_expression, :binary_operator_expression, :unit_expression]
+  end
+
+  # For use in consts
+  def generate_primitive_expression
     generate_one [:literal_expression, :binary_operator_expression]
   end
 
